@@ -103,6 +103,8 @@ Esse arquivo é ignorado pelo Git por padrão.
 
 ## Geração com NeMo Data Designer
 
+O modo NeMo está configurado para usar o modelo `z-ai/glm-5.2` via NVIDIA API.
+
 Para usar o modo opcional com NeMo Data Designer preview, configure sua chave:
 
 ```powershell

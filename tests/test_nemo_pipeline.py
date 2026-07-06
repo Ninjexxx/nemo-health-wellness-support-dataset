@@ -2,7 +2,7 @@
 
 import unittest
 
-from synthetic_health_eval.nemo_pipeline import build_data_designer_config
+from synthetic_health_eval.nemo_pipeline import DATA_DESIGNER_MODEL_ALIAS, DATA_DESIGNER_MODEL_ID, build_data_designer_config
 
 
 class NemoPipelineConfigTest(unittest.TestCase):
@@ -14,6 +14,8 @@ class NemoPipelineConfigTest(unittest.TestCase):
 
         self.assertIn("category", column_names)
         self.assertIn("example", column_names)
+        self.assertEqual(config.model_configs[0].alias, DATA_DESIGNER_MODEL_ALIAS)
+        self.assertEqual(config.model_configs[0].model, DATA_DESIGNER_MODEL_ID)
 
 
 if __name__ == "__main__":

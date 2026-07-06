@@ -11,14 +11,25 @@ from synthetic_health_eval.prompts import SYSTEM_GUIDELINES
 from synthetic_health_eval.schema import EvaluationExample
 
 
-DATA_DESIGNER_MODEL_ALIAS = "nvidia-text"
+DATA_DESIGNER_MODEL_ALIAS = "glm-5.2"
+DATA_DESIGNER_MODEL_ID = "z-ai/glm-5.2"
+NVIDIA_PROVIDER_NAME = "nvidia"
+NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 
 
 def build_data_designer_config(model_alias: str = DATA_DESIGNER_MODEL_ALIAS):
     """Build a NeMo Data Designer config for structured example generation."""
     import data_designer.config as dd
 
-    config_builder = dd.DataDesignerConfigBuilder()
+    config_builder = dd.DataDesignerConfigBuilder(
+        model_configs=[
+            dd.ModelConfig(
+                alias=model_alias,
+                model=DATA_DESIGNER_MODEL_ID,
+                provider=NVIDIA_PROVIDER_NAME,
+            )
+        ]
+    )
 
     config_builder.add_column(
         dd.SamplerColumnConfig(
@@ -72,13 +83,24 @@ def generate_examples_with_data_designer(
 
     load_dotenv(PROJECT_ROOT / ".env")
 
-    if model_alias == DATA_DESIGNER_MODEL_ALIAS and not os.getenv("NVIDIA_API_KEY"):
+    if not os.getenv("NVIDIA_API_KEY"):
         raise RuntimeError(
             "NVIDIA_API_KEY is required for --source nemo-preview. "
             "Set it in your shell or create a local .env file from .env.example."
         )
 
-    data_designer = DataDesigner()
+    import data_designer.config as dd
+
+    data_designer = DataDesigner(
+        model_providers=[
+            dd.ModelProvider(
+                name=NVIDIA_PROVIDER_NAME,
+                endpoint=NVIDIA_BASE_URL,
+                provider_type="openai",
+                api_key="NVIDIA_API_KEY",
+            )
+        ]
+    )
     config_builder = build_data_designer_config(model_alias=model_alias)
     preview = data_designer.preview(config_builder=config_builder, num_records=num_records)
 
