@@ -99,7 +99,13 @@ O arquivo será salvo em:
 data/synthetic/health_wellness_eval.jsonl
 ```
 
-Esse arquivo é ignorado pelo Git por padrão.
+Um relatório Markdown para revisão humana também será salvo em:
+
+```text
+reports/latest_dataset_review.md
+```
+
+Esses arquivos são ignorados pelo Git por padrão.
 
 ## Geração com NeMo Data Designer
 
@@ -129,6 +135,12 @@ $env:PYTHONPATH='src'
 - `docs/architecture.md`: visão geral da arquitetura.
 - `docs/sources.md`: fontes de referência usadas para orientar critérios de segurança.
 - `DATASET_CARD.md`: finalidade, limitações, riscos e uso pretendido do dataset.
+
+## Revisão dos dados gerados
+
+O JSONL é o formato principal para uso em pipelines. Para revisão humana, use o relatório em Markdown gerado em `reports/latest_dataset_review.md`.
+
+O pipeline também valida inconsistências básicas, como um registro marcado com `risk_level="medium"` cujo texto descreve o caso como "baixo risco".
 
 ## Aviso
 

@@ -5,7 +5,7 @@ Este projeto sera organizado como um pipeline simples de geracao de dados sintet
 ## Fluxo planejado
 
 ```text
-configuracao -> exemplos-base/prompts -> validacao -> exportacao
+configuracao -> exemplos-base/prompts -> validacao -> exportacao -> relatorio de revisao
                                   -> NeMo Data Designer
 ```
 
@@ -34,6 +34,10 @@ Confere se os registros gerados seguem o formato esperado e nao violam regras ba
 ### Exportacao
 
 Salva os dados sinteticos em `data/synthetic/`. Arquivos gerados nao devem ser versionados por padrao.
+
+### Relatorio de revisao
+
+Gera uma versao Markdown em `reports/latest_dataset_review.md` para facilitar leitura e revisao humana dos exemplos gerados.
 
 ## Decisoes iniciais
 

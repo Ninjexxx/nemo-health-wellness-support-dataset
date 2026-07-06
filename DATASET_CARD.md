@@ -72,3 +72,11 @@ Each record follows this shape:
 
 Records should be rejected if they include real personal data, real company
 names, medication instructions, diagnostic claims, or unsafe advice.
+
+The pipeline also generates a Markdown review report at
+`reports/latest_dataset_review.md` for human inspection. This report is intended
+to make generated records easier to read than raw JSONL.
+
+Generated records should also be reviewed for semantic consistency, including
+whether `risk_level` matches the wording used in `expected_behavior` and
+`safety_notes`.

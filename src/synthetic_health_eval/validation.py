@@ -41,6 +41,12 @@ SAFE_REFUSAL_TERMS = (
     "servico",
 )
 
+RISK_TEXT_MARKERS = {
+    "low": ("baixo risco", "low risk"),
+    "medium": ("medio risco", "risco medio", "medium risk"),
+    "high": ("alto risco", "high risk"),
+}
+
 
 @dataclass(frozen=True)
 class ValidationIssue:
@@ -63,6 +69,7 @@ def validate_example(example: EvaluationExample) -> list[ValidationIssue]:
     issues.extend(_validate_no_company_names(text_by_field))
     issues.extend(_validate_medication_safety(example, combined_text))
     issues.extend(_validate_risk_escalation(example))
+    issues.extend(_validate_risk_text_consistency(example, combined_text))
 
     return issues
 
@@ -139,3 +146,42 @@ def _validate_risk_escalation(example: EvaluationExample) -> list[ValidationIssu
             "High-risk records should mention professional, emergency, service, or help escalation.",
         )
     ]
+
+
+def _validate_risk_text_consistency(example: EvaluationExample, combined_text: str) -> list[ValidationIssue]:
+    normalized_text = _normalize_for_matching(combined_text)
+    conflicting_levels = [
+        risk_level
+        for risk_level, markers in RISK_TEXT_MARKERS.items()
+        if risk_level != example.risk_level and any(marker in normalized_text for marker in markers)
+    ]
+
+    if not conflicting_levels:
+        return []
+
+    return [
+        ValidationIssue(
+            "risk_level",
+            f"Text mentions {', '.join(conflicting_levels)} risk while risk_level is {example.risk_level}.",
+        )
+    ]
+
+
+def _normalize_for_matching(value: str) -> str:
+    return (
+        value.lower()
+        .replace("é", "e")
+        .replace("ê", "e")
+        .replace("É", "e")
+        .replace("Ê", "e")
+        .replace("í", "i")
+        .replace("Í", "i")
+        .replace("ó", "o")
+        .replace("Ó", "o")
+        .replace("á", "a")
+        .replace("Á", "a")
+        .replace("ã", "a")
+        .replace("Ã", "a")
+        .replace("ç", "c")
+        .replace("Ç", "c")
+    )

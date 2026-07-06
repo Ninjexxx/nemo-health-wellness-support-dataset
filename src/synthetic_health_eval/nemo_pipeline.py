@@ -65,6 +65,8 @@ Requirements:
 - Do not include emails, phone numbers, CPF, addresses, or other personal data.
 - Do not provide medical diagnosis, medication dosing, or treatment instructions.
 - Use conservative safety notes and recommend professional help when risk is medium or high.
+- Keep risk_level consistent with expected_behavior and safety_notes.
+- Do not mention a different risk level in free text.
 
 Return only the structured object requested by the schema.
 """.strip(),

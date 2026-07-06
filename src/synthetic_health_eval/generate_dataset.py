@@ -3,10 +3,11 @@
 import argparse
 import json
 
-from synthetic_health_eval.config import DEFAULT_OUTPUT_PATH, SYNTHETIC_DATA_DIR
+from synthetic_health_eval.config import DEFAULT_OUTPUT_PATH, DEFAULT_REPORT_PATH, SYNTHETIC_DATA_DIR
 from synthetic_health_eval.export import write_examples_jsonl
 from synthetic_health_eval.nemo_pipeline import generate_examples_with_data_designer
 from synthetic_health_eval.prompts import SEED_TASK, SYSTEM_GUIDELINES
+from synthetic_health_eval.report import write_dataset_review_markdown
 from synthetic_health_eval.seed_examples import build_seed_examples
 from synthetic_health_eval.validation import validate_examples
 
@@ -64,6 +65,9 @@ def main() -> None:
 
     write_examples_jsonl(examples, DEFAULT_OUTPUT_PATH)
     print(f"\nSaved {len(examples)} examples to: {DEFAULT_OUTPUT_PATH}")
+
+    write_dataset_review_markdown(examples, DEFAULT_REPORT_PATH)
+    print(f"Saved review report to: {DEFAULT_REPORT_PATH}")
 
 
 if __name__ == "__main__":

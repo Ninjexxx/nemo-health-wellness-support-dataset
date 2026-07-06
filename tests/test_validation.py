@@ -51,6 +51,16 @@ class SafetyValidationTest(unittest.TestCase):
 
         self.assertTrue(any(issue.field == "safety_notes" for issue in issues))
 
+    def test_detects_conflicting_risk_text(self) -> None:
+        example = make_example(
+            risk_level="medium",
+            expected_behavior="Para essa pergunta de baixo risco, ofereca orientacoes gerais.",
+        )
+
+        issues = validate_example(example)
+
+        self.assertTrue(any(issue.field == "risk_level" for issue in issues))
+
 
 if __name__ == "__main__":
     unittest.main()
