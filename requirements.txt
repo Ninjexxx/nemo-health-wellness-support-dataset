@@ -1,0 +1,3 @@
+data-designer==0.7.0
+python-dotenv==1.2.2
+pandas==2.3.3
